@@ -16,7 +16,7 @@ export default function PlayerList({ data }) {
             <option value="united states">United States</option>
             <option value="australia">Australia</option>
             <option value="england">England</option>
-            <option value="brazil">Brazil</option>
+            <option value="brazil" defaultValue>Brazil</option>
           </select>
         </label>
         <label>
