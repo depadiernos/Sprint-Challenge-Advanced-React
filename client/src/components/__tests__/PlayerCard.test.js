@@ -13,7 +13,7 @@ const mockData = {
 
 test("shows name", () => {
   const wrapper = rtl.render(<PlayerCard player={mockData} />);
-  const element = wrapper.getByText(/name:/iw);
+  const element = wrapper.getByText(/name:/i);
   expect(element).toHaveTextContent(/alex morgan/i);
 });
 
