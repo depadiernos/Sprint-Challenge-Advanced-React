@@ -1,62 +1,43 @@
 import React from "react";
 import * as rtl from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
+import {StateMock} from '@react-mock/state'
 
 import App from "./App";
 
 afterEach(rtl.cleanup);
 
-test("ballCount increments", () => {
-  const wrapper = rtl.render(<App />);
-  const display = wrapper.getByText(/ball:\W/i);
-  const button = wrapper.getByText("Ball");
-  rtl.fireEvent.click(button)
-  expect(display).toHaveTextContent("Ball: 1");
+const renderComponent = (data) =>
+  rtl.render(
+    <StateMock state={data}>
+      <App />
+    </StateMock>
+  );
+
+const mockData = {players:[
+  { name: "Alex Morgan", country: "United States", searches: 100 },
+  { name: "Megan Rapinoe", country: "United States", searches: 99 },
+  { name: "Marta", country: "Brazil", searches: 18 }
+]}
+
+test("renders 3 cards", () => {
+  const wrapper = renderComponent(mockData);
+  const element = wrapper.getAllByText(/name:/i);
+  expect(element.length).toBe(3);
+});
+test("toggles filter", () => {
+  const wrapper = renderComponent(mockData);
+  const element = wrapper.getByTestId('form');
+  const checkbox = element.childNodes[1];
+  rtl.fireEvent.click(checkbox)
+  expect(checkbox.childNodes[0]).toHaveProperty('checked', true);
 });
 
-test("ballCount resets at 4", () => {
-  const wrapper = rtl.render(<App />);
-  const display = wrapper.getByText(/ball:\W/i);
-  const button = wrapper.getByText("Ball");
-  rtl.fireEvent.click(button)
-  rtl.fireEvent.click(button)
-  rtl.fireEvent.click(button)
-  rtl.fireEvent.click(button)
-  expect(display).toHaveTextContent(/[0-3]/);
-});
 
-test("strikeCount increments", () => {
-  const wrapper = rtl.render(<App />);
-  const display = wrapper.getByText(/strike:\W/i);
-  const button = wrapper.getByText("Strike");
-  rtl.fireEvent.click(button)
-  expect(display).toHaveTextContent("Strike: 1");
-});
-
-test("strikeCount resets at 3", () => {
-  const wrapper = rtl.render(<App />);
-  const display = wrapper.getByText(/strike:\W/i);
-  const button = wrapper.getByText("Strike");
-  rtl.fireEvent.click(button)
-  rtl.fireEvent.click(button)
-  rtl.fireEvent.click(button)
-  expect(display).toHaveTextContent(/[0-2]/);
-});
-
-test("foulCount increments", () => {
-  const wrapper = rtl.render(<App />);
-  const display = wrapper.getByText(/foul:\W/i);
-  const button = wrapper.getByText("Foul");
-  rtl.fireEvent.click(button)
-  rtl.fireEvent.click(button)
-  expect(display).toHaveTextContent("Foul: 2");
-});
-
-test("hitCount increments", () => {
-  const wrapper = rtl.render(<App />);
-  const display = wrapper.getByText(/hit:\W/i);
-  const button = wrapper.getByText("Hit");
-  rtl.fireEvent.click(button)
-  rtl.fireEvent.click(button)
-  expect(display).toHaveTextContent("Hit: 2");
+test("dropdown ", () => {
+  const wrapper = renderComponent(mockData);
+  const element = wrapper.getByTestId('form');
+  const dropdown = element.childNodes[0]
+  rtl.fireEvent.click(dropdown)
+  expect(dropdown).toHaveTextContent("United States");
 });

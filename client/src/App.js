@@ -10,7 +10,7 @@ class App extends Component {
   componentDidMount() {
     axios.get("http://localhost:5000/api/players").then(response => {
       this.setState({players: response.data})
-    }).catch(err);
+    }).catch(err=>err);
   }
 
   render() {
