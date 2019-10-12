@@ -9,24 +9,29 @@ export default function PlayerList({ data }) {
 
   return (
     <div>
-      <select value={country} onChange={e => setCountry(e.target.value)}>
-        <option value="united states">United States</option>
-        <option value="australia">Australia</option>
-        <option value="england">England</option>
-        <option value="brazil">Brazil</option>
-      </select>
-      <label>
-        <input type="checkbox" value={filtered} onClick={toggle} /> Enable
-        Filter
-      </label>
+      <form data-testid="form">
+        <label>
+          Filter by Country
+          <select value={country} onChange={e => setCountry(e.target.value)}>
+            <option value="united states">United States</option>
+            <option value="australia">Australia</option>
+            <option value="england">England</option>
+            <option value="brazil">Brazil</option>
+          </select>
+        </label>
+        <label>
+          <input type="checkbox" value={filtered} onClick={toggle} /> Enable
+          Filter
+        </label>
+      </form>
       {data &&
         data.map(player => {
           if (filtered) {
             if (player.country.toLowerCase() === country) {
-              return <PlayerCard key={player.id} player={player} />;
-            } else { return null}
+              return <PlayerCard key={player.name} player={player} />;
+            }
           } else {
-            return <PlayerCard key={player.id} player={player} />;
+            return <PlayerCard key={player.name} player={player} />;
           }
         })}
     </div>
